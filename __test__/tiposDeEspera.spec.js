@@ -2,6 +2,7 @@ const puppeteer = require('puppeteer')
 
 describe('Tipos de espera', () => {
 
+    jest.setTimeout(350000)
     it('Mostrar todos los diferentes tipos de espera', async() => {
         const browser = await puppeteer.launch({
             headless: false, 
@@ -11,6 +12,8 @@ describe('Tipos de espera', () => {
         }) 
 
         const page = await browser.newPage()
+        // page.setDefaultTimeout(200000)
+        // page.setDefaultNavigationTimeout(10000)
         await page.goto('https://platzi.com', {waitUntil: 'networkidle0'})
 
         // Espera explicita
@@ -38,9 +41,11 @@ describe('Tipos de espera', () => {
         // await page.setViewport({width: 50, height: 50})
         // await observarResize
         await page.click('#closeSmallModal')
-        await page.waitForFunction(() => !document.querySelector('#example-modal-sizes-title-sm'))
+        await page.waitForFunction(() => !document.querySelector('#example-modal-sizes-title-sm'), {
+            timeout: 30000
+        })
 
         await browser.close()
-    }, 350000)
+    })
 })
 
