@@ -2,22 +2,41 @@ const puppeteer = require('puppeteer')
 
 describe('Extrayendo informacion', () => {
 
-    xit('Extraer el titulo de la pagina y la url', async() => {
-        const browser = await puppeteer.launch({
-            headless: false, 
-            executablePath: '/usr/bin/google-chrome',
-            defaultViewport: null,
-            //slowMo: 500
-        }) 
+    let browser;
+    let page;
 
-        const page = await browser.newPage()
+    // beforeEach(async () => {
+    //     browser = await puppeteer.launch({
+    //         headless: false,
+    //         defaultViewport: null
+    //     });
+    //     page = await browser.newPage()
+    // });
+
+    // afterEach(async () => {
+    //     await browser.close();
+    // });
+
+    beforeAll(async () => {
+        browser = await puppeteer.launch({
+            headless: false,
+            defaultViewport: null
+        });
+        page = await browser.newPage()
+    }, 3500000);
+
+    afterAll(async () => {
+        await browser.close();
+    });
+
+    xit('Extraer el titulo de la pagina y la url', async() => {
+
         await page.goto('https://platzi.com', {waitUntil: 'networkidle0'})
         const titulo = await page.title()
         const url = await page.url()
         console.log('titulo', titulo)
         console.log('url', url)
-   
-        await browser.close()
+  
     }, 350000)
 
     xit('Extraer la informacion de un elemento', async() => {
@@ -50,19 +69,11 @@ describe('Extrayendo informacion', () => {
     }, 350000)
 
     it('Contar los elementos de una pagina', async() => {
-        const browser = await puppeteer.launch({
-            headless: false, 
-            executablePath: '/usr/bin/google-chrome',
-            defaultViewport: null,
-            //slowMo: 500
-        }) 
 
-        const page = await browser.newPage()
         await page.goto('https://platzi.com', {waitUntil: 'networkidle0'})
         const images = await page.$$eval('img', (imagenes) => imagenes.length)
         console.log('imagenes ', images)
-   
-        await browser.close()
+
     }, 30000)
 })
 
